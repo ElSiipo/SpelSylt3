@@ -1,4 +1,6 @@
-# SpelSylt3
+# LoveDiver 
+_(working title)_
+
 GameJam, using Lua and LöVE2D
 
 https://www.lua.org/
