@@ -55,7 +55,7 @@ function Map:create()
     this.player = Player:create(this)
 
     -- generate a quad (individual frame/sprite) for each tile
-    this.tileSprites = generateQuads(this.spritesheet, 16, 16)
+    -- this.tileSprites = generateQuads(this.spritesheet, 16, 16)
 
     -- cache width and height of map in pixels
     this.mapWidthPixels = this.mapWidth * this.tileWidth
@@ -77,99 +77,99 @@ function Map:create()
 
     -- begin generating the terrain using vertical scan lines
     local x = 1
-    while x < this.mapWidth do
-        -- 2% chance to generate a cloud
-        -- make sure we're 3 tiles from edge at least
-        if x < this.mapWidth - 3 then
-            if math.random(20) == 1 then
-                -- choose a random vertical spot above where blocks/pipes generate
-                local cloudStart = math.random(this.mapHeight / 2 - 6)
+    -- while x < this.mapWidth do
+    --     -- 2% chance to generate a cloud
+    --     -- make sure we're 3 tiles from edge at least
+    --     if x < this.mapWidth - 3 then
+    --         if math.random(20) == 1 then
+    --             -- choose a random vertical spot above where blocks/pipes generate
+    --             local cloudStart = math.random(this.mapHeight / 2 - 6)
 
-                this:setTile(x, cloudStart, CLOUD_TOP_LEFT)
-                this:setTile(x, cloudStart + 1, CLOUD_BOTTOM_LEFT)
-                this:setTile(x + 1, cloudStart, CLOUD_TOP_MIDDLE)
-                this:setTile(x + 1, cloudStart + 1, CLOUD_BOTTOM_MIDDLE)
-                this:setTile(x + 2, cloudStart, CLOUD_TOP_RIGHT)
-                this:setTile(x + 2, cloudStart + 1, CLOUD_BOTTOM_RIGHT)
-            end
-        end
+    --             this:setTile(x, cloudStart, CLOUD_TOP_LEFT)
+    --             this:setTile(x, cloudStart + 1, CLOUD_BOTTOM_LEFT)
+    --             this:setTile(x + 1, cloudStart, CLOUD_TOP_MIDDLE)
+    --             this:setTile(x + 1, cloudStart + 1, CLOUD_BOTTOM_MIDDLE)
+    --             this:setTile(x + 2, cloudStart, CLOUD_TOP_RIGHT)
+    --             this:setTile(x + 2, cloudStart + 1, CLOUD_BOTTOM_RIGHT)
+    --         end
+    --     end
 
-        -- 5% chance to generate a pipe
-        if math.random(20) == 1 then
-            -- left side of pipe
-            this:setTile(x, this.mapHeight / 2 - 2, PIPE_TOP_LEFT)
-            this:setTile(x, this.mapHeight / 2 - 1, PIPE_BOTTOM_LEFT)
+    --     -- 5% chance to generate a pipe
+    --     if math.random(20) == 1 then
+    --         -- left side of pipe
+    --         this:setTile(x, this.mapHeight / 2 - 2, PIPE_TOP_LEFT)
+    --         this:setTile(x, this.mapHeight / 2 - 1, PIPE_BOTTOM_LEFT)
 
-            -- creates column of tiles going to bottom of map
-            for y = this.mapHeight / 2, this.mapHeight do
-                this:setTile(x, y, TILE_BRICK)
-            end
+    --         -- creates column of tiles going to bottom of map
+    --         for y = this.mapHeight / 2, this.mapHeight do
+    --             this:setTile(x, y, TILE_BRICK)
+    --         end
 
-            -- next vertical scan line
-            x = x + 1
+    --         -- next vertical scan line
+    --         x = x + 1
 
-            -- right side of pipe
-            this:setTile(x, this.mapHeight / 2 - 2, PIPE_TOP_RIGHT)
-            this:setTile(x, this.mapHeight / 2 - 1, PIPE_BOTTOM_RIGHT)
+    --         -- right side of pipe
+    --         this:setTile(x, this.mapHeight / 2 - 2, PIPE_TOP_RIGHT)
+    --         this:setTile(x, this.mapHeight / 2 - 1, PIPE_BOTTOM_RIGHT)
 
-            -- creates column of tiles going to bottom of map
-            for y = this.mapHeight / 2, this.mapHeight do
-                this:setTile(x, y, TILE_BRICK)
-            end
+    --         -- creates column of tiles going to bottom of map
+    --         for y = this.mapHeight / 2, this.mapHeight do
+    --             this:setTile(x, y, TILE_BRICK)
+    --         end
 
-            -- next vertical scan line
-            x = x + 1
+    --         -- next vertical scan line
+    --         x = x + 1
 
-        -- 10% chance to generate bush, being sure to generate away from edge
-        elseif math.random(10) == 1 and x < this.mapWidth - 3 then
-            local bushLevel = this.mapHeight / 2 - 1
+    --     -- 10% chance to generate bush, being sure to generate away from edge
+    --     elseif math.random(10) == 1 and x < this.mapWidth - 3 then
+    --         local bushLevel = this.mapHeight / 2 - 1
 
-            -- place bush component and then column of bricks
-            this:setTile(x, bushLevel, BUSH_LEFT)
-            for y = this.mapHeight / 2, this.mapHeight do
-                this:setTile(x, y, TILE_BRICK)
-            end
-            x = x + 1
+    --         -- place bush component and then column of bricks
+    --         this:setTile(x, bushLevel, BUSH_LEFT)
+    --         for y = this.mapHeight / 2, this.mapHeight do
+    --             this:setTile(x, y, TILE_BRICK)
+    --         end
+    --         x = x + 1
 
-            this:setTile(x, bushLevel, BUSH_MIDDLE)
-            for y = this.mapHeight / 2, this.mapHeight do
-                this:setTile(x, y, TILE_BRICK)
-            end
-            x = x + 1
+    --         this:setTile(x, bushLevel, BUSH_MIDDLE)
+    --         for y = this.mapHeight / 2, this.mapHeight do
+    --             this:setTile(x, y, TILE_BRICK)
+    --         end
+    --         x = x + 1
 
-            this:setTile(x, bushLevel, BUSH_RIGHT)
-            for y = this.mapHeight / 2, this.mapHeight do
-                this:setTile(x, y, TILE_BRICK)
-            end
-            x = x + 1
+    --         this:setTile(x, bushLevel, BUSH_RIGHT)
+    --         for y = this.mapHeight / 2, this.mapHeight do
+    --             this:setTile(x, y, TILE_BRICK)
+    --         end
+    --         x = x + 1
 
-        -- 10% chance to not generate anything, creating a gap
-        elseif math.random(10) ~= 1 then
-            -- creates column of tiles going to bottom of map
-            for y = this.mapHeight / 2, this.mapHeight do
-                this:setTile(x, y, TILE_BRICK)
-            end
+    --     -- 10% chance to not generate anything, creating a gap
+    --     elseif math.random(10) ~= 1 then
+    --         -- creates column of tiles going to bottom of map
+    --         for y = this.mapHeight / 2, this.mapHeight do
+    --             this:setTile(x, y, TILE_BRICK)
+    --         end
 
-            -- chance to create a block for Mario to hit
-            if math.random(15) == 1 then
-                this:setTile(x, this.mapHeight / 2 - 4, TILE_QUESTION)
-            end
+    --         -- chance to create a block for Mario to hit
+    --         if math.random(15) == 1 then
+    --             this:setTile(x, this.mapHeight / 2 - 4, TILE_QUESTION)
+    --         end
 
-            -- next vertical scan line
-            x = x + 1
-        else
-            -- increment X so we skip two scanlines, creating a 2-tile gap
-            x = x + 2
-        end
-    end
+    --         -- next vertical scan line
+    --         x = x + 1
+    --     else
+    --         -- increment X so we skip two scanlines, creating a 2-tile gap
+    --         x = x + 2
+    --     end
+    -- end
 
-    -- create sprite batch from tile quads
-    for y = 1, this.mapHeight do
-        for x = 1, this.mapWidth do
-            this.spriteBatch:add(this.tileSprites[this:getTile(x, y)],
-                (x - 1) * this.tileWidth, (y - 1) * this.tileHeight)
-        end
-    end
+    -- -- create sprite batch from tile quads
+    -- for y = 1, this.mapHeight do
+    --     for x = 1, this.mapWidth do
+    --         this.spriteBatch:add(this.tileSprites[this:getTile(x, y)],
+    --             (x - 1) * this.tileWidth, (y - 1) * this.tileHeight)
+    --     end
+    -- end
 
     return this
 end
