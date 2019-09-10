@@ -3,7 +3,8 @@ require 'animation'
 Player = {}
 Player.__index = Player
 
-local WALKING_SPEED = 140
+local PADDEL_SPEED = 140
+local VERTICAL_SPEED = 100
 
 function Player:create(map)
     local this = {
@@ -38,7 +39,7 @@ function Player:create(map)
                 love.graphics.newQuad(0, 0, 32, 16, this.texture:getDimensions())
             }
         }),
-        ['walking'] = Animation:create({
+        ['swimming'] = Animation:create({
             texture = this.texture,
             frames = {
                 love.graphics.newQuad(34, 0, 32, 16, this.texture:getDimensions()),
@@ -59,29 +60,56 @@ function Player:create(map)
             -- begin moving if left or right is pressed
             if love.keyboard.isDown('left') then
                 direction = 'left'
-                this.dx = -WALKING_SPEED
-                this.state = 'walking'
-                this.animations['walking']:restart()
-                this.animation = this.animations['walking']
+                this.dx = -PADDEL_SPEED
+                this.dy = 0
+                this.state = 'swimming'
+                this.animations['swimming']:restart()
+                this.animation = this.animations['swimming']
             elseif love.keyboard.isDown('right') then
                 direction = 'right'
-                this.dx = WALKING_SPEED
-                this.state = 'walking'
-                this.animations['walking']:restart()
-                this.animation = this.animations['walking']
+                this.dx = PADDEL_SPEED
+                this.dy = 0
+                this.state = 'swimming'
+                this.animations['swimming']:restart()
+                this.animation = this.animations['swimming']
+            elseif love.keyboard.isDown('up') then
+                direction = 'up'
+                this.dx = 0
+                this.dy = -VERTICAL_SPEED
+                this.state = 'swimming'
+                this.animations['swimming']:restart()
+                this.animation = this.animations['swimming']
+            elseif love.keyboard.isDown('down') then
+                direction = 'down'
+                this.dx = 0
+                this.dy = VERTICAL_SPEED
+                this.state = 'swimming'
+                this.animations['swimming']:restart()
+                this.animation = this.animations['swimming']
             end
         end,
-        ['walking'] = function(dt)
-            -- keep track of input to switch movement while walking, or reset
+        ['swimming'] = function(dt)
+            -- keep track of input to switch movement while swimming, or reset
             -- to idle if we're not moving
             if love.keyboard.isDown('left') then
                 direction = 'left'
-                this.dx = -WALKING_SPEED
+                this.dx = -PADDEL_SPEED
+                this.dy = 0
             elseif love.keyboard.isDown('right') then
                 direction = 'right'
-                this.dx = WALKING_SPEED
+                this.dx = PADDEL_SPEED
+                this.dy = 0
+            elseif love.keyboard.isDown('up') then
+                direction = 'up'
+                this.dx = 0
+                this.dy = -VERTICAL_SPEED
+            elseif love.keyboard.isDown('down') then
+                direction = 'down'
+                this.dx = 0
+                this.dy = VERTICAL_SPEED
             else
                 this.dx = 0
+                this.dy = 0
                 this.state = 'idle'
                 this.animation = this.animations['idle']
             end
@@ -97,20 +125,30 @@ function Player:update(dt)
     self.animation:update(dt)
     self.currentFrame = self.animation:getCurrentFrame()
     self.x = self.x + self.dx * dt
+    self.y = self.y + self.dy * dt
 end
 
 function Player:render()
     local scaleX
+    local rotation
 
     -- set negative x scale factor if facing left, which will flip the sprite
     -- when applied
     if direction == 'right' then
         scaleX = 1
-    else
+    elseif direction == 'left' then
         scaleX = -1
+    end
+
+    if direction == 'up' then
+        rotation = -30
+    elseif direction == 'down' then
+        rotation = 30
+    else
+        rotation = 0
     end
 
     -- draw sprite with scale factor and offsets
     love.graphics.draw(self.texture, self.currentFrame, self.x + self.xOffset,
-        self.y + self.yOffset, 0, scaleX, 1, self.xOffset, self.yOffset)
+        self.y + self.yOffset, math.rad(rotation), scaleX, 1, self.xOffset, self.yOffset)
 end

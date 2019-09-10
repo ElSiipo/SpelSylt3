@@ -9,28 +9,28 @@ require 'Util'
 Map = {}
 Map.__index = Map
 
-TILE_BRICK = 1
-TILE_EMPTY = 29
-TILE_QUESTION = 25
+-- TILE_BRICK = 1
+-- TILE_EMPTY = 29
+-- TILE_QUESTION = 25
 
--- pipe tiles
-PIPE_TOP_LEFT = 265
-PIPE_TOP_RIGHT = 266
-PIPE_BOTTOM_LEFT = 298
-PIPE_BOTTOM_RIGHT = 299
+-- -- pipe tiles
+-- PIPE_TOP_LEFT = 265
+-- PIPE_TOP_RIGHT = 266
+-- PIPE_BOTTOM_LEFT = 298
+-- PIPE_BOTTOM_RIGHT = 299
 
--- cloud tiles
-CLOUD_TOP_LEFT = 661
-CLOUD_TOP_MIDDLE = 662
-CLOUD_TOP_RIGHT = 663
-CLOUD_BOTTOM_LEFT = 694
-CLOUD_BOTTOM_MIDDLE = 695
-CLOUD_BOTTOM_RIGHT = 696
+-- -- cloud tiles
+-- CLOUD_TOP_LEFT = 661
+-- CLOUD_TOP_MIDDLE = 662
+-- CLOUD_TOP_RIGHT = 663
+-- CLOUD_BOTTOM_LEFT = 694
+-- CLOUD_BOTTOM_MIDDLE = 695
+-- CLOUD_BOTTOM_RIGHT = 696
 
 -- bush tiles
-BUSH_LEFT = 309
-BUSH_MIDDLE = 310
-BUSH_RIGHT = 311
+-- BUSH_LEFT = 309
+-- BUSH_MIDDLE = 310
+-- BUSH_RIGHT = 311
 
 -- a speed to multiply delta time to scroll map; smooth value
 local scrollSpeed = 124
@@ -69,14 +69,14 @@ function Map:create()
     setmetatable(this, self)
 
     -- first, fill map with empty tiles
-    for y = 1, this.mapHeight do
-        for x = 1, this.mapWidth do
-            this:setTile(x, y, TILE_EMPTY)
-        end
-    end
+    -- for y = 1, this.mapHeight do
+    --     for x = 1, this.mapWidth do
+    --         this:setTile(x, y, TILE_EMPTY)
+    --     end
+    -- end
 
     -- begin generating the terrain using vertical scan lines
-    local x = 1
+    -- local x = 1
     -- while x < this.mapWidth do
     --     -- 2% chance to generate a cloud
     --     -- make sure we're 3 tiles from edge at least
