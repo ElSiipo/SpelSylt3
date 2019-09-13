@@ -22,9 +22,14 @@ map = Map:create()
 
 -- function called at start of game to load assets
 function love.load()
+    -- Music: www.bensound.com
+    local music = love.audio.newSource( 'sound/bensound-deepblue.mp3', 'static' )
+    music:setLooping( true ) --so it doesnt stop
+    music:play()
+
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
-    sprite = love.graphics.newImage('graphics/heroScaled.png')
+    local sprite = love.graphics.newImage('graphics/heroScaled.png')
     x = virtualWidth / 2 - sprite:getWidth() / 2
     y = virtualHeight / 2 - sprite:getHeight() / 2
 
@@ -85,8 +90,8 @@ function love.draw()
     -- begin virtual resolution drawing
     push:apply('start')
 
-    -- clear screen using Mario background blue
-    love.graphics.clear(108, 140, 255, 255)
+    -- clear screen, set color
+    love.graphics.setColor( 153, 204, 255 )
 
     -- renders our map object onto the screen
     love.graphics.translate(math.floor(-map.camX), math.floor(-map.camY))

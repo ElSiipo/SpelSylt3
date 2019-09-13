@@ -7,7 +7,7 @@ function Animation:create( params )
         frames = params.frames or {},
         
         -- time in seconds each frame takes (1/20 by default)
-        interval = params.interval or 0.05,
+        interval = params.interval or 0.2,
 
         -- stores amount of time that has elapsed
         timer = 0,

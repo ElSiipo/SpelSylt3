@@ -3,8 +3,8 @@ require 'animation'
 Player = {}
 Player.__index = Player
 
-local PADDEL_SPEED = 140
-local VERTICAL_SPEED = 100
+local PADDEL_SPEED = 50
+local VERTICAL_SPEED = 40
 
 function Player:create(map)
     local this = {
@@ -47,7 +47,7 @@ function Player:create(map)
                 love.graphics.newQuad(98, 0, 32, 16, this.texture:getDimensions()),
                 love.graphics.newQuad(66, 0, 32, 16, this.texture:getDimensions()),
             },
-            interval = 0.07
+            interval = 0.15
         })
     }
 
