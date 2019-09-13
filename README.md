@@ -1,7 +1,10 @@
 # LoveDiver 
 _(working title)_
-![ScreenShot](https://raw.githubusercontent.com/ElSiipo/SpelSylt3/master/screenShot.png)
 GameJam, using Lua and LöVE2D
+
+
+![ScreenShot](https://raw.githubusercontent.com/ElSiipo/SpelSylt3/master/screenShot.png)
+
 
 https://www.lua.org/
 
