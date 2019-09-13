@@ -12,11 +12,12 @@ https://www.lua.org/
 https://love2d.org/
 
 
-
+ 
+  
+   
 
 
 _Diary_
-
 2019-09-08: 2-3 hours
 
 Coming up with idea, creating project, getting to know Lua & Love2D
