@@ -16,8 +16,13 @@ https://love2d.org/
 
 
 _Diary_
+
 2019-09-08: 2-3 hours
+
 Coming up with idea, creating project, getting to know Lua & Love2D
 
+
 2019-09-13: ~3 hours
+
 Updating assets, fixing water, animation, sound
+
