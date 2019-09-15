@@ -22,11 +22,6 @@ map = Map:create()
 
 -- function called at start of game to load assets
 function love.load()
-    -- Music: www.bensound.com
-    local music = love.audio.newSource( 'sound/bensound-deepblue.mp3', 'static' )
-    music:setLooping( true ) --so it doesnt stop
-    music:play()
-
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
     local sprite = love.graphics.newImage('graphics/heroScaled.png')

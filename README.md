@@ -12,7 +12,7 @@ https://www.lua.org/
 https://love2d.org/
 
 
- 
+ Music: www.bensound.com
   
    
 
@@ -28,3 +28,7 @@ Coming up with idea, creating project, getting to know Lua & Love2D
 
 Updating assets, fixing water, animation, sound
 
+
+2019-09-15 ~1 hour
+
+Started adding animation for bubbles, some restructuring of code.

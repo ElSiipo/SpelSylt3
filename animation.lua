@@ -5,7 +5,7 @@ function Animation:create( params )
     local this = {
         texture = params.texture,
         frames = params.frames or {},
-        
+
         -- time in seconds each frame takes (1/20 by default)
         interval = params.interval or 0.2,
 
@@ -30,7 +30,7 @@ end
 
 function Animation:update(dt)
     self.timer = self.timer + dt
-    
+
     -- iteratively subtract interval from timer to proceed in the animation,
     -- in case we skipped more than one frame
     while self.timer > self.interval do

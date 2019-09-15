@@ -18,6 +18,7 @@ function Player:create(map)
 
         map = map,
         texture = love.graphics.newImage('graphics/heroScaled.png'),
+        bubbles_texture = love.graphics.newImage('graphics/bubbles_spritesheet_Scaled.png'),
 
         currentFrame = nil,
         animation = nil,
@@ -46,6 +47,16 @@ function Player:create(map)
                 love.graphics.newQuad(66, 0, 32, 16, this.texture:getDimensions()),
                 love.graphics.newQuad(98, 0, 32, 16, this.texture:getDimensions()),
                 love.graphics.newQuad(66, 0, 32, 16, this.texture:getDimensions()),
+            },
+            interval = 0.15
+        }),
+        ['bubbles'] = Animation:create({
+            bubbleTexture = this.bubbles_texture,
+            bubbleFrames = {
+                love.graphics.newQuad(16, 0, 16, 16, this.bubbles_texture:getDimensions()),
+                love.graphics.newQuad(32, 0, 16, 16, this.bubbles_texture:getDimensions()),
+                love.graphics.newQuad(48, 0, 16, 16, this.bubbles_texture:getDimensions()),
+                love.graphics.newQuad(0, 16, 16, 16, this.bubbles_texture:getDimensions()),
             },
             interval = 0.15
         })
@@ -113,6 +124,11 @@ function Player:create(map)
                 this.state = 'idle'
                 this.animation = this.animations['idle']
             end
+
+            this:checkCollisionAbove()
+            this:checkCollisionRight()
+            this:checkCollisionLeft()
+            this:checkCollisionBelow()
         end
     }
 
@@ -126,6 +142,49 @@ function Player:update(dt)
     self.currentFrame = self.animation:getCurrentFrame()
     self.x = self.x + self.dx * dt
     self.y = self.y + self.dy * dt
+end
+
+function Player:checkCollisionAbove()
+    if self.map:collides(self.map:tileAt(self.x, self.y - 1)) or
+        self.map:collides(self.map:tileAt(self.x, self.y + self.height - 1)) then
+            self.dy = 0
+            self.y = self.y + (self.y % self.map.tileHeight)
+    end
+end
+
+function Player:checkCollisionBelow()
+    if self.map:collides(self.map:tileAt(self.x, self.y + 1)) or
+        self.map:collides(self.map:tileAt(self.x, self.y + self.height + 1)) then
+            self.dy = 0
+            self.y = self.y - 1
+    end
+end
+
+function Player:checkCollisionLeft()
+    if self.dx < 0 then
+        -- check if there's a tile directly beneath us
+        if self.map:collides(self.map:tileAt(self.x - 1, self.y)) or
+            self.map:collides(self.map:tileAt(self.x - 1, self.y + self.height - 1)) then
+            -- if so, reset velocity and position and change state
+            self.dx = 0
+            local xmod = (self.x - 1) % self.map.tileWidth
+            local offset = self.map.tileWidth - xmod
+            self.x = math.floor(self.x - 1 + offset)
+        end
+    end
+end
+
+-- checks two tiles to our right to see if a collision occurred
+function Player:checkCollisionRight()
+    if self.dx > 0 then
+        -- check if there's a tile directly beneath us
+        if self.map:collides(self.map:tileAt(self.x + self.width, self.y)) or
+            self.map:collides(self.map:tileAt(self.x + self.width, self.y + self.height - 1)) then
+            -- if so, reset velocity and position and change state
+            self.dx = 0
+            self.x = math.floor(self.x - (self.x % self.map.tileWidth))
+        end
+    end
 end
 
 function Player:render()
@@ -151,4 +210,9 @@ function Player:render()
     -- draw sprite with scale factor and offsets
     love.graphics.draw(self.texture, self.currentFrame, self.x + self.xOffset,
         self.y + self.yOffset, math.rad(rotation), scaleX, 1, self.xOffset, self.yOffset)
+
+    -- if math.random(5) == 1 then
+    --     love.graphics.draw(self.texture, self.currentFrame, self.x + self.xOffset,
+    --         self.y + self.yOffset, math.rad(rotation), scaleX, 1, self.xOffset, self.yOffset)
+    -- end
 end
