@@ -13,6 +13,9 @@ function Player:create(map)
         width = 32,
         height = 16,
 
+        bubblePosX = 0,
+        bubblePosY = 0,
+
         xOffset = 16,
         yOffset = 8,
 
@@ -33,6 +36,9 @@ function Player:create(map)
     this.y = map.tileHeight * ((map.mapHeight - 2) / 2) - this.height
     this.x = map.tileWidth * 10
 
+    this.bubblePosX = this.x
+    this.bubblePosY = this.y
+
     this.animations = {
         ['idle'] = Animation:create({
             texture = this.texture,
@@ -47,16 +53,6 @@ function Player:create(map)
                 love.graphics.newQuad(66, 0, 32, 16, this.texture:getDimensions()),
                 love.graphics.newQuad(98, 0, 32, 16, this.texture:getDimensions()),
                 love.graphics.newQuad(66, 0, 32, 16, this.texture:getDimensions()),
-            },
-            interval = 0.15
-        }),
-        ['bubbles'] = Animation:create({
-            bubbleTexture = this.bubbles_texture,
-            bubbleFrames = {
-                love.graphics.newQuad(16, 0, 16, 16, this.bubbles_texture:getDimensions()),
-                love.graphics.newQuad(32, 0, 16, 16, this.bubbles_texture:getDimensions()),
-                love.graphics.newQuad(48, 0, 16, 16, this.bubbles_texture:getDimensions()),
-                love.graphics.newQuad(0, 16, 16, 16, this.bubbles_texture:getDimensions()),
             },
             interval = 0.15
         })
@@ -162,14 +158,12 @@ end
 
 function Player:checkCollisionLeft()
     if self.dx < 0 then
-        -- check if there's a tile directly beneath us
-        if self.map:collides(self.map:tileAt(self.x - 1, self.y)) or
+        if self.map:collides(self.map:tileAt(self.x - 1, self.y)) or 
             self.map:collides(self.map:tileAt(self.x - 1, self.y + self.height - 1)) then
-            -- if so, reset velocity and position and change state
-            self.dx = 0
-            local xmod = (self.x - 1) % self.map.tileWidth
-            local offset = self.map.tileWidth - xmod
-            self.x = math.floor(self.x - 1 + offset)
+                self.dx = 0
+                local xmod = (self.x - 1) % self.map.tileWidth
+                local offset = self.map.tileWidth - xmod
+                self.x = math.floor(self.x - 1 + offset)
         end
     end
 end
@@ -211,8 +205,14 @@ function Player:render()
     love.graphics.draw(self.texture, self.currentFrame, self.x + self.xOffset,
         self.y + self.yOffset, math.rad(rotation), scaleX, 1, self.xOffset, self.yOffset)
 
-    -- if math.random(5) == 1 then
-    --     love.graphics.draw(self.texture, self.currentFrame, self.x + self.xOffset,
-    --         self.y + self.yOffset, math.rad(rotation), scaleX, 1, self.xOffset, self.yOffset)
-    -- end
+    love.graphics.setColor(1, 1, 1)
+    -- love.graphics.circle("line", self.x + 50 - math.random(5), self.y - math.random(5), 1, 10)
+
+    if math.random(10) == 1 then
+        self.bubblePosY = self.bubblePosY - 1
+    end
+
+    love.graphics.circle("line", self.bubblePosX + self.width - 3, self.bubblePosY + 3, 1, 10)
+    love.graphics.circle("line", self.bubblePosX + self.width - 1, self.bubblePosY - 3, 1, 10)
+    love.graphics.circle("line", self.bubblePosX + self.width + 3, self.bubblePosY, 3, 10)
 end
