@@ -54,6 +54,7 @@ function Map:create()
 
     -- associate player with map
     this.player = Player:create(this)
+    this.bubbles = Bubbles:create(this)
 
     -- generate a quad (individual frame/sprite) for each tile
     this.worldTileSprites = generateQuads(this.world_spritesheet, 16, 16)
@@ -135,6 +136,7 @@ end
 -- function to update camera offset based on player coordinates
 function Map:update(dt)
     self.player:update(dt)
+    self.bubbles:update(dt)
 
     -- keep camera's X coordinate following the player, preventing camera from
     -- scrolling past 0 to the left and the map's width
@@ -161,4 +163,5 @@ function Map:render()
     -- replace tile-by-tile rendering with spriteBatch draw call
     love.graphics.draw(self.spriteBatch)
     self.player:render()
+    self.bubbles:render()
 end

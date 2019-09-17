@@ -13,15 +13,12 @@ function Player:create(map)
         width = 32,
         height = 16,
 
-        bubblePosX = 0,
-        bubblePosY = 0,
-
         xOffset = 16,
         yOffset = 8,
 
         map = map,
         texture = love.graphics.newImage('graphics/heroScaled.png'),
-        bubbles_texture = love.graphics.newImage('graphics/bubbles_spritesheet_Scaled.png'),
+        -- bubbles_texture = love.graphics.newImage('graphics/bubbles_spritesheet_Scaled.png'),
 
         currentFrame = nil,
         animation = nil,
@@ -35,9 +32,6 @@ function Player:create(map)
 
     this.y = map.tileHeight * ((map.mapHeight - 2) / 2) - this.height
     this.x = map.tileWidth * 10
-
-    this.bubblePosX = this.x
-    this.bubblePosY = this.y
 
     this.animations = {
         ['idle'] = Animation:create({
@@ -205,14 +199,14 @@ function Player:render()
     love.graphics.draw(self.texture, self.currentFrame, self.x + self.xOffset,
         self.y + self.yOffset, math.rad(rotation), scaleX, 1, self.xOffset, self.yOffset)
 
-    love.graphics.setColor(1, 1, 1)
+    -- love.graphics.setColor(1, 1, 1)
     -- love.graphics.circle("line", self.x + 50 - math.random(5), self.y - math.random(5), 1, 10)
 
-    if math.random(10) == 1 then
-        self.bubblePosY = self.bubblePosY - 1
-    end
+    -- if math.random(10) == 1 then
+    --     self.bubblePosY = self.bubblePosY - 1
+    -- end
 
-    love.graphics.circle("line", self.bubblePosX + self.width - 3, self.bubblePosY + 3, 1, 10)
-    love.graphics.circle("line", self.bubblePosX + self.width - 1, self.bubblePosY - 3, 1, 10)
-    love.graphics.circle("line", self.bubblePosX + self.width + 3, self.bubblePosY, 3, 10)
+    -- love.graphics.circle("line", self.bubblePosX + self.width - 3, self.bubblePosY + 3, 1, 10)
+    -- love.graphics.circle("line", self.bubblePosX + self.width - 1, self.bubblePosY - 3, 1, 10)
+    -- love.graphics.circle("line", self.bubblePosX + self.width + 3, self.bubblePosY, 3, 10)
 end

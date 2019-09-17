@@ -7,6 +7,7 @@ push = require 'push'
 
 require 'Map'
 require 'Player'
+require 'Bubbles'
 
 -- virtual resolution
 virtualWidth = 432
