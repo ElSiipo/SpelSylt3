@@ -37,3 +37,8 @@ Started adding animation for bubbles, some restructuring of code.
 2019-09-17 ~2 hour
 
 Scrapped the idea for sprite-bubbles, started implementing a simple function for drawing circles instead. 
+
+
+2019-09-17 3 hour
+
+Implemented bubble animation. Fixed window scaling. Started adding mines.

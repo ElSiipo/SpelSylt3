@@ -7,7 +7,8 @@ push = require 'push'
 
 require 'Map'
 require 'Player'
-require 'Bubbles'
+require 'Bubble'
+require 'WaterMine'
 
 -- virtual resolution
 virtualWidth = 432
@@ -24,10 +25,6 @@ map = Map:create()
 -- function called at start of game to load assets
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
-
-    local sprite = love.graphics.newImage('graphics/heroScaled.png')
-    x = virtualWidth / 2 - sprite:getWidth() / 2
-    y = virtualHeight / 2 - sprite:getHeight() / 2
 
     push:setupScreen(virtualWidth, virtualHeight, windowWidth, windowHeight, {
         fullscreen = false,
@@ -58,7 +55,6 @@ function love.keyboard.wasReleased(key)
     end
 end
 
--- called whenever a key is pressed
 function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
@@ -67,16 +63,13 @@ function love.keypressed(key)
     love.keyboard.keysPressed[key] = true
 end
 
--- called whenever a key is released
 function love.keyreleased(key)
     love.keyboard.keysReleased[key] = true
 end
 
--- called every frame, with dt passed in as delta in time since last frame
 function love.update(dt)
     map:update(dt)
 
-    -- reset all keys pressed and released this frame
     love.keyboard.keysPressed = {}
     love.keyboard.keysReleased = {}
 end

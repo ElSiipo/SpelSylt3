@@ -27,7 +27,9 @@ function Player:create(map)
         direction = 'right',
 
         dx = 0,
-        dy = 0
+        dy = 0,
+
+        localDt = 0
     }
 
     this.y = map.tileHeight * ((map.mapHeight - 2) / 2) - this.height
@@ -132,6 +134,45 @@ function Player:update(dt)
     self.currentFrame = self.animation:getCurrentFrame()
     self.x = self.x + self.dx * dt
     self.y = self.y + self.dy * dt
+
+    self.localDt = self.localDt + dt
+
+    if self.localDt > 6 then
+        local bubbleX = self.x + self.width
+
+        self.map:addBubble(Bubble:create(self.map, bubbleX + math.random(-10, 10), self.y + math.random(-10, 10)))
+        self.map:addBubble(Bubble:create(self.map, bubbleX + math.random(-10, 10), self.y + math.random(-10, 10)))
+        self.map:addBubble(Bubble:create(self.map, bubbleX + math.random(-10, 10), self.y + math.random(-10, 10)))
+        self.map:addBubble(Bubble:create(self.map, bubbleX + math.random(-10, 10), self.y + math.random(-10, 10)))
+        self.map:addBubble(Bubble:create(self.map, bubbleX + math.random(-10, 10), self.y + math.random(-10, 10)))
+
+        -- self.map:addBubble(Bubble:create(self.map, self.x, self.y))
+        self.localDt = 0
+    end
+end
+
+function Player:render()
+    local scaleX
+    local rotation
+
+    -- set negative x scale factor if facing left, which will flip the sprite
+    if direction == 'right' then
+        scaleX = 1
+    elseif direction == 'left' then
+        scaleX = -1
+    end
+
+    if direction == 'up' then
+        rotation = -30
+    elseif direction == 'down' then
+        rotation = 30
+    else
+        rotation = 0
+    end
+
+    -- draw sprite with scale factor and offsets
+    love.graphics.draw(self.texture, self.currentFrame, self.x + self.xOffset,
+        self.y + self.yOffset, math.rad(rotation), scaleX, 1, self.xOffset, self.yOffset)
 end
 
 function Player:checkCollisionAbove()
@@ -173,40 +214,4 @@ function Player:checkCollisionRight()
             self.x = math.floor(self.x - (self.x % self.map.tileWidth))
         end
     end
-end
-
-function Player:render()
-    local scaleX
-    local rotation
-
-    -- set negative x scale factor if facing left, which will flip the sprite
-    -- when applied
-    if direction == 'right' then
-        scaleX = 1
-    elseif direction == 'left' then
-        scaleX = -1
-    end
-
-    if direction == 'up' then
-        rotation = -30
-    elseif direction == 'down' then
-        rotation = 30
-    else
-        rotation = 0
-    end
-
-    -- draw sprite with scale factor and offsets
-    love.graphics.draw(self.texture, self.currentFrame, self.x + self.xOffset,
-        self.y + self.yOffset, math.rad(rotation), scaleX, 1, self.xOffset, self.yOffset)
-
-    -- love.graphics.setColor(1, 1, 1)
-    -- love.graphics.circle("line", self.x + 50 - math.random(5), self.y - math.random(5), 1, 10)
-
-    -- if math.random(10) == 1 then
-    --     self.bubblePosY = self.bubblePosY - 1
-    -- end
-
-    -- love.graphics.circle("line", self.bubblePosX + self.width - 3, self.bubblePosY + 3, 1, 10)
-    -- love.graphics.circle("line", self.bubblePosX + self.width - 1, self.bubblePosY - 3, 1, 10)
-    -- love.graphics.circle("line", self.bubblePosX + self.width + 3, self.bubblePosY, 3, 10)
 end

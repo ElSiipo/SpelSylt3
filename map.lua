@@ -1,23 +1,14 @@
---[[
-    Contains tile data and necessary code for rendering a tile map to the
-    screen.
-]]
-
 require 'Util'
 
--- object-oriented boilerplate; establish Map's "prototype"
 Map = {}
 Map.__index = Map
 
--- TILE_BRICK = 1
 TILE_EMPTY = 29
 TILE_OCEAN_FLOOR = 16
--- TILE_QUESTION = 25
 
 WATER_WAVE = 664
 WATER_BODY = 697
 
--- cloud tiles
 CLOUD_TOP_LEFT = 661
 CLOUD_TOP_MIDDLE = 662
 CLOUD_TOP_RIGHT = 663
@@ -25,19 +16,13 @@ CLOUD_BOTTOM_LEFT = 694
 CLOUD_BOTTOM_MIDDLE = 695
 CLOUD_BOTTOM_RIGHT = 696
 
--- a speed to multiply delta time to scroll map; smooth value
-local scrollSpeed = 124
-
--- constructor for our map object
 function Map:create()
-
     -- Music: www.bensound.com
     local music = love.audio.newSource('sound/bensound-deepblue.mp3', 'static')
     music:setLooping(true) --so it doesnt stop
     music:play()
 
     local this = {
-        -- our texture containing all sprites
         world_spritesheet = love.graphics.newImage('graphics/tiles.png'),
 
         tileWidth = 16,
@@ -46,15 +31,14 @@ function Map:create()
         mapHeight = 28,
         waveHeight = 12,
         tiles = {},
+        bubbles = {},
+        waterMines = {},
 
-        -- camera offsets
         camX = 0,
         camY = -3,
     }
 
-    -- associate player with map
     this.player = Player:create(this)
-    this.bubbles = Bubbles:create(this)
 
     -- generate a quad (individual frame/sprite) for each tile
     this.worldTileSprites = generateQuads(this.world_spritesheet, 16, 16)
@@ -66,7 +50,6 @@ function Map:create()
     -- sprite batch for efficient tile rendering
     this.spriteBatch = love.graphics.newSpriteBatch(this.world_spritesheet, this.mapWidth * this.mapHeight)
 
-    -- more OO boilerplate so we have access to class functions
     setmetatable(this, self)
 
     -- first, fill map with empty tiles
@@ -80,11 +63,9 @@ function Map:create()
     local currentWidth = 1
     while currentWidth < this.mapWidth do
         -- 2% chance to generate a cloud
-        -- make sure we're 3 tiles from edge at least
         if currentWidth < this.mapWidth - 3 then
             if math.random(20) == 1 then
-                -- choose a random vertical spot above where blocks/pipes generate
-                local cloudStart = math.random(this.waveHeight / 2 - 6)
+                local cloudStart = math.random(this.waveHeight / 2)
 
                 this:setTile(currentWidth, cloudStart, CLOUD_TOP_LEFT)
                 this:setTile(currentWidth, cloudStart + 1, CLOUD_BOTTOM_LEFT)
@@ -100,6 +81,14 @@ function Map:create()
 
         for currentHeight = this.waveHeight / 2 - 1, this.mapHeight do
             this:setTile(currentWidth, currentHeight, WATER_BODY)
+        end
+
+        -- Add WaterMines
+        if math.random(10) == 1 then
+            this:addWaterMine(WaterMine:create(
+                this,
+                currentWidth + math.random(-10, this.mapWidth * 10),
+                this.mapHeight * 4 + math.random(-this.mapHeight * 2, this.mapHeight * 3)))
         end
 
         this:setTile(currentWidth, this.mapHeight / 2 + 1, TILE_OCEAN_FLOOR)
@@ -133,15 +122,56 @@ function Map:collides(tile)
     return false
 end
 
+function Map:addBubble(bubble)
+    table.insert(self.bubbles, bubble)
+    return bubble
+end
+
+function Map:addWaterMine(waterMine)
+    table.insert(self.waterMines, waterMine)
+    return waterMine
+end
+
 -- function to update camera offset based on player coordinates
 function Map:update(dt)
     self.player:update(dt)
-    self.bubbles:update(dt)
 
-    -- keep camera's X coordinate following the player, preventing camera from
-    -- scrolling past 0 to the left and the map's width
+    for i = #self.bubbles, 1, -1 do
+        local currentBubble = self.bubbles[i]
+        currentBubble:update(dt)
+
+        if (currentBubble.shouldBurst) then
+            table.remove(self.bubbles, i)
+            currentBubble:destroy()
+        end
+    end
+
+    for i = #self.waterMines, 1, -1 do
+        local currentWaterMine = self.waterMines[i]
+        currentWaterMine:update(dt)
+
+        if (currentWaterMine.shouldExplode) then
+            table.remove(self.waterMines, i)
+            currentWaterMine:destroy()
+        end
+    end
+
     self.camX = math.max(0, math.min(self.player.x - virtualWidth / 2,
         math.min(self.mapWidthPixels - virtualWidth, self.player.x)))
+end
+
+function Map:render()
+    love.graphics.draw(self.spriteBatch)
+
+    self.player:render()
+
+    for _, bubble in ipairs(self.bubbles) do
+        bubble:render()
+    end
+
+    for _, waterMine in ipairs(self.waterMines) do
+        waterMine:render()
+    end
 end
 
 function Map:tileAt(x, y)
@@ -156,12 +186,4 @@ end
 -- sets a tile at a given x-y coordinate to an integer value
 function Map:setTile(x, y, tile)
     self.tiles[(y - 1) * self.mapWidth + x] = tile
-end
-
--- renders our map to the screen, to be called by main's render
-function Map:render()
-    -- replace tile-by-tile rendering with spriteBatch draw call
-    love.graphics.draw(self.spriteBatch)
-    self.player:render()
-    self.bubbles:render()
 end
