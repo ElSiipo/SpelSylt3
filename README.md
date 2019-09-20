@@ -42,3 +42,8 @@ Scrapped the idea for sprite-bubbles, started implementing a simple function for
 2019-09-17 3 hour
 
 Implemented bubble animation. Fixed window scaling. Started adding mines.
+
+
+2019-09-20 1 hour
+
+Implemented mine animation, improved mine-collision detection.
