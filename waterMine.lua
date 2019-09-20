@@ -3,6 +3,8 @@ WaterMine = {}
 WaterMine.__index = WaterMine
 
 local VERTICAL_SPEED = 40
+local MAX_HEIGHT = 0
+local MIN_HEIGHT = 0
 
 function WaterMine:create(map, x, y)
     local this = {
@@ -12,8 +14,13 @@ function WaterMine:create(map, x, y)
         x = x,
         y = y,
 
+        shouldMoveUp = false,
+
         shouldExplode = false,
     }
+
+    MAX_HEIGHT = this.y - 50
+    MIN_HEIGHT = this.y + 150
 
     setmetatable(this, self)
     return this
@@ -22,6 +29,19 @@ end
 function WaterMine:update(dt)
     -- self.y = self.y - VERTICAL_SPEED * dt
 
+    if self.shouldMoveUp then 
+        self.y = math.floor(self.y) - VERTICAL_SPEED * dt
+
+        if math.floor(self.y) <= MAX_HEIGHT then
+            self.shouldMoveUp = false
+        end
+    else 
+        self.y = math.floor(self.y) + VERTICAL_SPEED * dt
+        
+        if math.floor(self.y) >= MIN_HEIGHT then
+            self.shouldMoveUp = true
+        end
+    end
     
 
     if isBetweenValues(self.y, math.floor(self.map.player.y), math.floor(self.map.player.y) + 16) and 
@@ -37,7 +57,8 @@ end
 function WaterMine:render()
     love.graphics.draw( self.mine_sprite, self.x , self.y)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.print("x: " .. self.x .. "y: " .. self.y, self.x, self.y)
+    -- love.graphics.print("x: " .. self.x .. "y: " .. self.y, self.x, self.y)
+    love.graphics.print("y: " .. self.y .. " MinHeight: " .. MIN_HEIGHT, self.x, self.y)
     -- love.graphics.print("x: " .. math.floor(self.map.player.x) .. "y: " .. math.floor(self.map.player.y), self.x, self.y + 10)
 
     -- love.graphics.print("x: " .. math.floor(self.x / 16) + 1  .. "y: " .. math.floor(self.y / 16) + 1,  self.x, self.y + 10)
