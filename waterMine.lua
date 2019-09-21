@@ -19,7 +19,7 @@ function WaterMine:create(map, x, y)
         shouldExplode = false,
     }
 
-    MAX_HEIGHT = this.y - 50
+    MAX_HEIGHT = this.y
     MIN_HEIGHT = this.y + 150
 
     setmetatable(this, self)
@@ -57,12 +57,6 @@ end
 function WaterMine:render()
     love.graphics.draw( self.mine_sprite, self.x , self.y)
     love.graphics.setColor(1, 1, 1)
-    -- love.graphics.print("x: " .. self.x .. "y: " .. self.y, self.x, self.y)
-    love.graphics.print("y: " .. self.y .. " MinHeight: " .. MIN_HEIGHT, self.x, self.y)
-    -- love.graphics.print("x: " .. math.floor(self.map.player.x) .. "y: " .. math.floor(self.map.player.y), self.x, self.y + 10)
-
-    -- love.graphics.print("x: " .. math.floor(self.x / 16) + 1  .. "y: " .. math.floor(self.y / 16) + 1,  self.x, self.y + 10)
-
 end
 
 function WaterMine:destroy()
