@@ -215,3 +215,6 @@ function Player:checkCollisionRight()
         end
     end
 end
+
+function Player:destroy()
+end

@@ -5,10 +5,10 @@ love.keyboard.keysReleased = {}
 -- virtual resolution library
 push = require 'push'
 
-require 'Map'
-require 'Player'
-require 'Bubble'
-require 'WaterMine'
+require 'map'
+require 'player'
+require 'bubble'
+require 'waterMine'
 
 -- virtual resolution
 virtualWidth = 432

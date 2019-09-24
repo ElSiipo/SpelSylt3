@@ -1,4 +1,4 @@
-require 'Util'
+require 'util'
 
 Map = {}
 Map.__index = Map
@@ -153,6 +153,7 @@ function Map:update(dt)
         if (currentWaterMine.shouldExplode) then
             table.remove(self.waterMines, i)
             currentWaterMine:destroy()
+            self.player:destroy()
         end
     end
 

@@ -15,7 +15,6 @@ function WaterMine:create(map, x, y)
         y = y,
 
         shouldMoveUp = false,
-
         shouldExplode = false,
     }
 
@@ -27,24 +26,21 @@ function WaterMine:create(map, x, y)
 end
 
 function WaterMine:update(dt)
-    -- self.y = self.y - VERTICAL_SPEED * dt
+    if self.shouldMoveUp then
+        self.y = self.y - VERTICAL_SPEED * dt
 
-    if self.shouldMoveUp then 
-        self.y = math.floor(self.y) - VERTICAL_SPEED * dt
-
-        if math.floor(self.y) <= MAX_HEIGHT then
+        if self.y <= MAX_HEIGHT then
             self.shouldMoveUp = false
         end
-    else 
-        self.y = math.floor(self.y) + VERTICAL_SPEED * dt
-        
-        if math.floor(self.y) >= MIN_HEIGHT then
+    else
+        self.y = self.y + VERTICAL_SPEED * dt
+
+        if self.y >= MIN_HEIGHT then
             self.shouldMoveUp = true
         end
     end
-    
 
-    if isBetweenValues(self.y, math.floor(self.map.player.y), math.floor(self.map.player.y) + 16) and 
+    if isBetweenValues(self.y, math.floor(self.map.player.y), math.floor(self.map.player.y) + 16) and
         isBetweenValues(self.x, math.floor(self.map.player.x), math.floor(self.map.player.x) + 16) then
             self.shouldExplode = true
     end
