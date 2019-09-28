@@ -10,6 +10,7 @@ require 'player'
 require 'bubble'
 require 'waterMine'
 require 'rustyShip'
+require 'seaweed'
 
 -- virtual resolution
 virtualWidth = 432
@@ -32,7 +33,7 @@ function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
     push:setupScreen(virtualWidth, virtualHeight, windowWidth, windowHeight, {
-        fullscreen = false,
+        fullscreen = true,
         resizable = true
     })
 end
@@ -85,7 +86,7 @@ function love.draw()
     push:apply('start')
 
     -- clear screen, set color
-    love.graphics.setColor( 153, 204, 255 )
+    -- love.graphics.setColor( 0.5, 0.7, 1 )
 
     -- renders our map object onto the screen
     love.graphics.translate(math.floor(-map.camX), math.floor(-map.camY))

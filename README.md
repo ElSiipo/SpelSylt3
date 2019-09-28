@@ -47,3 +47,8 @@ Implemented bubble animation. Fixed window scaling. Started adding mines.
 2019-09-20 1 hour
 
 Implemented mine animation, improved mine-collision detection.
+
+
+2019-09-28 1 hour
+
+Added ship, will soon start the game from said ship and jump in the water 

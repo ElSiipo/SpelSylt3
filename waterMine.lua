@@ -52,7 +52,7 @@ end
 
 function WaterMine:render()
     love.graphics.draw( self.mine_sprite, self.x , self.y)
-    love.graphics.setColor(1, 1, 1)
+    -- love.graphics.setColor(1, 1, 1)
 end
 
 function WaterMine:destroy()

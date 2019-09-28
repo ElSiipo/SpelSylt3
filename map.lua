@@ -30,9 +30,11 @@ function Map:create()
         mapWidth = 100,
         mapHeight = 28,
         waveHeight = 12,
+
         tiles = {},
         bubbles = {},
         waterMines = {},
+        seaweeds = {},
 
         camX = 0,
         camY = -3,
@@ -53,7 +55,7 @@ function Map:create()
 
     setmetatable(this, self)
 
-    -- first, fill map with empty tiles
+    -- Create empty tiles
     for y = 1, this.mapHeight do
         for x = 1, this.mapWidth do
             this:setTile(x, y, TILE_EMPTY)
@@ -63,7 +65,7 @@ function Map:create()
     -- begin generating the terrain using vertical scan lines
     local currentWidth = 1
     while currentWidth < this.mapWidth do
-        -- 2% chance to generate a cloud
+        -- Create clouds
         if currentWidth < this.mapWidth - 3 then
             if math.random(20) == 1 then
                 local cloudStart = math.random(this.waveHeight / 2)
@@ -79,17 +81,24 @@ function Map:create()
 
         -- Create water
         this:setTile(currentWidth, this.waveHeight / 2 - 2, WATER_WAVE)
-
         for currentHeight = this.waveHeight / 2 - 1, this.mapHeight do
             this:setTile(currentWidth, currentHeight, WATER_BODY)
         end
 
-        -- Add WaterMines
+        -- Create WaterMines
         if math.random(10) == 1 then
             this:addWaterMine(WaterMine:create(
                 this,
                 currentWidth + math.random(-10, this.mapWidth * 10),
                 this.mapHeight * 4 + math.random(-this.mapHeight * 2, this.mapHeight * 3)))
+        end
+
+        -- Create Seaweeds
+        if math.random(20) == 1 then
+            this:addSeaweed(Seaweed:create(
+                this,
+                currentWidth + math.random(-10, this.mapWidth * 10),
+                this.mapHeight * 6 - 12))
         end
 
         this:setTile(currentWidth, this.mapHeight / 2 + 1, TILE_OCEAN_FLOOR)
@@ -133,6 +142,11 @@ function Map:addWaterMine(waterMine)
     return waterMine
 end
 
+function Map:addSeaweed(seaweed)
+    table.insert(self.seaweeds, seaweed)
+    return seaweed
+end
+
 -- function to update camera offset based on player coordinates
 function Map:update(dt)
     self.rustyShip:update(dt)
@@ -159,12 +173,19 @@ function Map:update(dt)
         end
     end
 
+    for i = #self.seaweeds, 1, -1 do
+        local currentSeaweed = self.seaweeds[i]
+        currentSeaweed:update(dt)
+    end
+
     self.camX = math.max(0, math.min(self.player.x - virtualWidth / 2,
         math.min(self.mapWidthPixels - virtualWidth, self.player.x)))
 end
 
 function Map:render()
     self.rustyShip:render()
+
+    -- love.graphics.setColor( 0.5, 0.7, 1 )
     love.graphics.draw(self.spriteBatch)
 
     self.player:render()
@@ -175,6 +196,10 @@ function Map:render()
 
     for _, waterMine in ipairs(self.waterMines) do
         waterMine:render()
+    end
+
+    for _, seaweed in ipairs(self.seaweeds) do
+        seaweed:render()
     end
 end
 
