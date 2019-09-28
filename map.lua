@@ -38,6 +38,7 @@ function Map:create()
         camY = -3,
     }
 
+    this.rustyShip = RustyShip:create(this, this.waveHeight, 10)
     this.player = Player:create(this)
 
     -- generate a quad (individual frame/sprite) for each tile
@@ -134,6 +135,7 @@ end
 
 -- function to update camera offset based on player coordinates
 function Map:update(dt)
+    self.rustyShip:update(dt)
     self.player:update(dt)
 
     for i = #self.bubbles, 1, -1 do
@@ -162,6 +164,7 @@ function Map:update(dt)
 end
 
 function Map:render()
+    self.rustyShip:render()
     love.graphics.draw(self.spriteBatch)
 
     self.player:render()

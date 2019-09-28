@@ -18,7 +18,6 @@ function Player:create(map)
 
         map = map,
         texture = love.graphics.newImage('graphics/heroScaled.png'),
-        -- bubbles_texture = love.graphics.newImage('graphics/bubbles_spritesheet_Scaled.png'),
 
         currentFrame = nil,
         animation = nil,

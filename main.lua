@@ -9,10 +9,15 @@ require 'map'
 require 'player'
 require 'bubble'
 require 'waterMine'
+require 'rustyShip'
 
 -- virtual resolution
 virtualWidth = 432
 virtualHeight = 243
+
+--For debugging graphics etc
+-- virtualWidth = 1280
+-- virtualHeight = 720
 
 -- actual window resolution
 windowWidth = 1280
