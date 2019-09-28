@@ -7,6 +7,7 @@ function RustyShip:create(map, x, y)
     local this = {
         map = map,
 
+        -- Texture from https://scottbarnett_lma.artstation.com/projects/GXeOL1
         texture = love.graphics.newImage('graphics/rusty-ship-scaled.png'),
 
         currentFrame = nil,
